@@ -22,7 +22,14 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+The following environment variables are used:
+
+  * `GSUITE_USER` - if using a service account for Auth, which user to
+  impersonate.
+  * `GOOGLE_APPLICATION_CREDENTIALS` - the file that will be used to for google
+  application credentials if dumped from:
+  * `GOOGLE_CREDENTIALS_BASE64` - base64 encoded contents of a typical google
+  credentials file.
 
 ## Development
 
