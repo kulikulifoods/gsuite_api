@@ -1,5 +1,8 @@
 require "google/apis/sheets_v4"
 
+require "gsuite_api/sheets/spreadsheet"
+require "gsuite_api/sheets/sheet"
+
 module GSuiteAPI
   module Sheets
     class << self
