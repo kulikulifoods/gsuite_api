@@ -5,7 +5,7 @@ require "gsuite_api/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "gsuite_api"
-  spec.version       = GsuiteApi::VERSION
+  spec.version       = GSuiteAPI::VERSION
   spec.authors       = ["Jordan Moncharmont"]
   spec.email         = ["jormon@gmail.com"]
 

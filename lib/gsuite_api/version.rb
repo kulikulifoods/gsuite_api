@@ -1,3 +1,3 @@
-module GsuiteApi
+module GSuiteAPI
   VERSION = "0.1.0"
 end

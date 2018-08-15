@@ -1,5 +1,8 @@
 require "gsuite_api/version"
 
-module GsuiteApi
+# code
+require "gsuite_api/sheets"
+
+module GSuiteAPI
   # Your code goes here...
 end
