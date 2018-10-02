@@ -1,3 +1,5 @@
+require "active_support/core_ext/module/delegation"
+
 module GSuiteAPI::Sheets
   class Sheet
     delegate :id, :service, to: :spreadsheet
