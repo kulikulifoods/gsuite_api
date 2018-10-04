@@ -39,7 +39,7 @@ module GSuiteAPI::Sheets
       needed_size = values.count
       row_delta = needed_size - current_size
       if row_delta < 0
-        delete_rows(row_delta, start_index: 2)
+        delete_rows(row_delta.abs, start_index: 2)
       elsif row_delta > 0
         insert_rows(row_delta, start_index: 2)
       end
