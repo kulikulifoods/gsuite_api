@@ -36,8 +36,16 @@ module GSuiteAPI::Sheets
 
     def replace_table(values:, value_input_option:)
       current_size = table_row_count - 1
+      if current_size == 0
+        # this means the table is actually empty, so replacing data is going
+        # to have weird effects anyways. so in this case, it's safe to use the
+        # row count.
+        current_size = row_count - 1
+      end
+
       needed_size = values.count
       row_delta = needed_size - current_size
+
       if row_delta < 0
         delete_rows(row_delta.abs, start_index: 2)
       elsif row_delta > 0
