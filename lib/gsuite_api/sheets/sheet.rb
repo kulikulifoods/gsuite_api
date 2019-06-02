@@ -100,7 +100,7 @@ module GSuiteAPI::Sheets
 
       request[insert_or_delete_key] = {
         range: {
-          sheetId: api_object.properties.sheet_id,
+          sheet_id: api_object.properties.sheet_id,
           dimension: dimension,
           start_index: start_index,
           end_index: start_index + number,
