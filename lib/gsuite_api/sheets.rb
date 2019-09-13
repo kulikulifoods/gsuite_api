@@ -10,6 +10,10 @@ module GSuiteAPI
         Spreadsheet.new service: service, id: id
       end
 
+      def sheet(id:, name:)
+        by_id(id)[name]
+      end
+
       def service
         @service || _service
       end
