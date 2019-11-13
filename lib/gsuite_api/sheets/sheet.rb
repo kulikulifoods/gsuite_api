@@ -85,7 +85,7 @@ module GSuiteAPI::Sheets
     end
 
     def modify(insert_or_delete, rows_or_colums, number, start_index:,
-               inherits_from_before: true)
+               inherit_from_before: true)
       request = {}
 
       insert_or_delete_key = {
@@ -105,7 +105,7 @@ module GSuiteAPI::Sheets
           start_index: start_index,
           end_index: start_index + number,
         },
-        inherits_from_before: inherits_from_before,
+        inherit_from_before: inherit_from_before,
       }
 
       update = { requests: [request] }
