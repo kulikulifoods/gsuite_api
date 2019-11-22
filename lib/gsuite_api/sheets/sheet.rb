@@ -52,6 +52,12 @@ module GSuiteAPI::Sheets
         insert_rows(row_delta, start_index: 2)
       end
 
+      # clear the prior date to ensure no blanks
+      ending_col = ("A".ord + values.first.count - 1).chr
+      ending_row = values.count + 1
+      range = "A2:#{ending_col}#{ending_row}"
+      clear(range: range)
+
       # write data
       service.update_spreadsheet_value(id, range_with_name("A1"),
         { values: values }, value_input_option: value_input_option)
