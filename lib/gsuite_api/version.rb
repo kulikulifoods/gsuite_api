@@ -1,3 +1,3 @@
 module GSuiteAPI
-  VERSION = "0.2.8".freeze
+  VERSION = "1.0.0".freeze
 end
