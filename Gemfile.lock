@@ -48,7 +48,7 @@ GEM
     multipart-post (2.1.1)
     os (1.0.1)
     public_suffix (4.0.1)
-    rake (10.5.0)
+    rake (12.3.3)
     representable (3.0.4)
       declarative (< 0.1.0)
       declarative-option (< 0.2.0)
@@ -82,10 +82,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 1.16)
+  bundler (~> 2.0)
   gsuite_api!
-  rake (~> 10.0)
+  rake (~> 12.0)
   rspec (~> 3.0)
 
 BUNDLED WITH
-   1.17.3
+   2.0.2
