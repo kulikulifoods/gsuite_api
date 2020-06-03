@@ -76,7 +76,7 @@ module GSuiteAPI::Sheets
       row_delta = needed_size - current_size
 
       if row_delta < 0
-        delete_rows(row_delta.abs, start_index: 2)
+        delete_rows(row_delta.abs, start_index: 1)
       elsif row_delta > 0
         insert_rows(row_delta, start_index: 2)
       end
@@ -84,6 +84,17 @@ module GSuiteAPI::Sheets
       # write data
       service.update_spreadsheet_value(id, range_with_name("A2"),
         { values: values }, value_input_option: value_input_option)
+    end
+
+    def upsert_table(values:, value_input_option:)
+      # touch up the headers
+      service.update_spreadsheet_value \
+        id, range_with_name("1:1"), { values: [values[0]] },
+        value_input_option: value_input_option
+
+      # replace the data
+      replace_table \
+        values: values[1..-1], value_input_option: value_input_option
     end
 
     def clear(range:)
