@@ -86,6 +86,17 @@ module GSuiteAPI::Sheets
         { values: values }, value_input_option: value_input_option)
     end
 
+    def upsert_table(values:, value_input_option:)
+      # touch up the headers
+      service.update_spreadsheet_value \
+        id, range_with_name("1:1"), { values: [values[0]] },
+        value_input_option: value_input_option
+
+      # replace the data
+      replace_table \
+        values: values[1..-1], value_input_option: value_input_option
+    end
+
     def clear(range:)
       service.clear_values(id, range_with_name(range))
     end
