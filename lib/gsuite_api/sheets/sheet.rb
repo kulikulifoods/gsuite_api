@@ -95,6 +95,8 @@ module GSuiteAPI::Sheets
       # replace the data
       replace_table \
         values: values[1..-1], value_input_option: value_input_option
+
+      add_a1_note(note: "Data Vortex updated at #{Time.current}")
     end
 
     def clear(range:)
@@ -162,6 +164,32 @@ module GSuiteAPI::Sheets
     def escaped_name
       # @escaped_name ||= CGI.escape(name)
       name
+    end
+
+    def add_a1_note(note:)
+      add_note = {
+        update_cells: {
+          start: {
+            sheet_id: api_object.properties.sheet_id,
+            row_index: 0,
+            column_index: 0,
+          },
+          rows: [
+            {
+              values: [
+                {
+                  note: note,
+                }
+              ],
+            }
+          ],
+          fields: 'note',
+        },
+      }
+
+      update = { requests: [add_note] }
+
+      service.batch_update_spreadsheet(id, update, {})
     end
 
     def inspect
