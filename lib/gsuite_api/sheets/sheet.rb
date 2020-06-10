@@ -131,12 +131,12 @@ module GSuiteAPI::Sheets
       service.batch_update_spreadsheet id, update, {}
     end
 
-    def delete_rows(*args)
-      modify :delete, :rows, *args
+    def delete_rows(number, start_index:)
+      modify :delete, :rows, number, start_index: start_index
     end
 
-    def insert_rows(*args)
-      modify :insert, :rows, *args
+    def insert_rows(number, start_index:)
+      modify :insert, :rows, number, start_index: start_index
     end
 
     def crop_header
