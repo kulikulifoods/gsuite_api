@@ -13,7 +13,7 @@ module GSuiteAPI
       @auth_client ||= _auth_client
     end
 
-    def map_nils_to_empty_strings(values)
+    def map_nils_to_empty_strings!(values)
       values.map! { |a| a.map! { |e| e.nil? ? '' : e } }
     end
 
