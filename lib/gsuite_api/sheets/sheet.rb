@@ -1,4 +1,4 @@
-require "active_support/core_ext/module/delegation"
+require 'active_support/core_ext/module/delegation'
 
 module GSuiteAPI::Sheets
   class Sheet
@@ -21,7 +21,7 @@ module GSuiteAPI::Sheets
 
     # gets the number of rows in the first column's table
     def table_row_count
-      get(range: "A:A").values.count
+      get(range: 'A:A').values.count
     end
 
     def get(range:)
@@ -30,14 +30,15 @@ module GSuiteAPI::Sheets
 
     # only supports appending to the table in A1
     def append(values:, value_input_option:)
-      named_range = range_with_name "A1"
-      service.append_spreadsheet_value(id, named_range, { values: values },
-        value_input_option: value_input_option)
+      named_range = range_with_name 'A1'
+      service.append_spreadsheet_value \
+        id, named_range, { values: values },
+        value_input_option: value_input_option
     end
 
     def replace_sheet(values:, value_input_option:)
       current_size = table_row_count
-      if current_size == 0
+      if current_size.zero?
         # this means the table is actually empty, so replacing data is going
         # to have weird effects anyways. so in this case, it's safe to use the
         # row count.
@@ -47,26 +48,27 @@ module GSuiteAPI::Sheets
       needed_size = values.count
       row_delta = needed_size - current_size
 
-      if row_delta < 0
+      if row_delta.negative?
         delete_rows(row_delta.abs, start_index: 2)
-      elsif row_delta > 0
+      elsif row_delta.positive? && (needed_size > (row_count - 1))
         insert_rows(row_delta, start_index: 2)
       end
 
       # clear the prior date to ensure no blanks
-      ending_col = ("A".ord + values.first.count - 1).chr
+      ending_col = ('A'.ord + values.first.count - 1).chr
       ending_row = values.count + 1
       range = "A2:#{ending_col}#{ending_row}"
       clear(range: range)
 
       # write data
-      service.update_spreadsheet_value(id, range_with_name("A1"),
-        { values: values }, value_input_option: value_input_option)
+      service.update_spreadsheet_value \
+        id, range_with_name('A1'), { values: values },
+        value_input_option: value_input_option
     end
 
     def replace_table(values:, value_input_option:)
       current_size = table_row_count - 1
-      if current_size == 0
+      if current_size.zero?
         # this means the table is actually empty, so replacing data is going
         # to have weird effects anyways. so in this case, it's safe to use the
         # row count.
@@ -76,21 +78,22 @@ module GSuiteAPI::Sheets
       needed_size = values.count
       row_delta = needed_size - current_size
 
-      if row_delta < 0
+      if row_delta.negative?
         delete_rows(row_delta.abs, start_index: 1)
-      elsif row_delta > 0
+      elsif row_delta.positive? && (needed_size > (row_count - 1))
         insert_rows(row_delta, start_index: 2)
       end
 
       # write data
-      service.update_spreadsheet_value(id, range_with_name("A2"),
-        { values: values }, value_input_option: value_input_option)
+      service.update_spreadsheet_value \
+        id, range_with_name('A2'), { values: values },
+        value_input_option: value_input_option
     end
 
     def upsert_table(values:, value_input_option:)
       # touch up the headers
       service.update_spreadsheet_value \
-        id, range_with_name("1:1"), { values: [values[0]] },
+        id, range_with_name('1:1'), { values: [values[0]] },
         value_input_option: value_input_option
 
       # replace the data
@@ -114,8 +117,8 @@ module GSuiteAPI::Sheets
       }.fetch(insert_or_delete)
 
       dimension = {
-        rows: "ROWS",
-        columns: "COLUMNS",
+        rows: 'ROWS',
+        columns: 'COLUMNS',
       }.fetch(rows_or_colums)
 
       request[insert_or_delete_key] = {
@@ -141,7 +144,7 @@ module GSuiteAPI::Sheets
     end
 
     def crop_header
-      num_cols = get(range: "A1:1").values.first.count
+      num_cols = get(range: 'A1:1').values.first.count
       update = { requests: [{
         update_sheet_properties: {
           properties: {
@@ -151,7 +154,7 @@ module GSuiteAPI::Sheets
               column_count: num_cols,
             },
           },
-          fields: "gridProperties(rowCount,columnCount)",
+          fields: 'gridProperties(rowCount,columnCount)',
         },
       }] }
       service.batch_update_spreadsheet(id, update, {})
@@ -194,8 +197,8 @@ module GSuiteAPI::Sheets
     end
 
     def inspect
-      format("\#<%p id=%p title=%p sheet=%p>", self.class, id,
-        spreadsheet.title, name)
+      format '#<%p id=%p title=%p sheet=%p>', \
+             self.class, id, spreadsheet.title, name
     end
   end
 end
