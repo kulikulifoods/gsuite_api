@@ -4,6 +4,7 @@ module GSuiteAPI::Sheets
   class Sheet
     delegate :id, :service, to: :spreadsheet
     attr_reader :name, :spreadsheet, :api_object
+
     def initialize(spreadsheet:, name:, api_object:)
       @spreadsheet = spreadsheet
       @name = name
