@@ -30,7 +30,8 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "google-api-client"
+  spec.add_dependency "google-apis-sheets_v4"
+  spec.add_dependency "google-apis-drive_v3"
   spec.add_dependency "activesupport"
 
   spec.add_development_dependency "bundler", "~> 2.0"
