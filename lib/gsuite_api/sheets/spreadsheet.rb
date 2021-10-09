@@ -26,6 +26,23 @@ module GSuiteAPI::Sheets
       api_object.properties.title
     end
 
+    def delete(sheet_ids:)
+      requests = Array(sheet_ids).map do |sheet_id|
+        { delete_sheet: { sheet_id: sheet_id } }
+      end
+
+      service.batch_update_spreadsheet id, { requests: requests }, {}
+    end
+
+    def duplicate(from:, to:)
+      request = { duplicate_sheet: {
+        source_sheet_id: self[from].properties.sheet_id,
+        new_sheet_name: to,
+      } }
+
+      service.batch_update_spreadsheet id, { requests: [request] }, {}
+    end
+
     def inspect
       format("\#<%p id=%p title=%p>", self.class, id, title)
     end

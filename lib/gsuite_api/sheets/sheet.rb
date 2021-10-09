@@ -4,6 +4,8 @@ require 'active_support/core_ext/module/delegation'
 module GSuiteAPI::Sheets
   class Sheet
     delegate :id, :service, to: :spreadsheet
+    delegate :properties, to: :api_object
+
     attr_reader :name, :spreadsheet, :api_object
 
     def initialize(spreadsheet:, name:, api_object:)
@@ -27,6 +29,12 @@ module GSuiteAPI::Sheets
 
     def get(range:)
       service.get_spreadsheet_values(id, range_with_name(range))
+    end
+
+    def set(range:, values:, value_input_option: 'USER_ENTERED')
+      service.update_spreadsheet_value \
+        id, range_with_name(range), { values: values },
+        value_input_option: value_input_option
     end
 
     # only supports appending to the table in A1
