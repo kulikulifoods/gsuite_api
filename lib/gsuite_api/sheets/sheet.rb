@@ -32,26 +32,6 @@ module GSuiteAPI::Sheets
         value_input_option: value_input_option
     end
 
-    # only supports appending to the table in A1
-    def append(values:, value_input_option:)
-      named_range = range_with_name 'A1'
-      service.append_spreadsheet_value \
-        id, named_range, { values: values },
-        value_input_option: value_input_option
-    end
-
-    def replace_table(values:, value_input_option:)
-      clear(range: "A2:#{column_name(values.first.count)}#{row_count}")
-
-      row_delta = values.count - (row_count - 1)
-      insert_rows(row_delta, start_index: row_count) if row_delta.positive?
-
-      # write data
-      service.update_spreadsheet_value \
-        id, range_with_name('A2'), { values: values },
-        value_input_option: value_input_option
-    end
-
     def upsert_table(values:, value_input_option:)
       # touch up the headers
       service.update_spreadsheet_value \
@@ -105,31 +85,8 @@ module GSuiteAPI::Sheets
       modify :insert, :rows, number, start_index: start_index
     end
 
-    def crop_header
-      num_cols = get(range: 'A1:1').values.first.count
-      update = { requests: [{
-        update_sheet_properties: {
-          properties: {
-            sheet_id: api_object.properties.sheet_id,
-            grid_properties: {
-              row_count: 1,
-              column_count: num_cols,
-            },
-          },
-          fields: 'gridProperties(rowCount,columnCount)',
-        },
-      }] }
-      service.batch_update_spreadsheet(id, update, {})
-    end
-
     def range_with_name(range)
-      "#{escaped_name}!#{range}"
-    end
-
-    # I thought we might need to be able to escape the name?  Guess not...
-    def escaped_name
-      # @escaped_name ||= CGI.escape(name)
-      name
+      "#{name}!#{range}"
     end
 
     def add_a1_note(note:)
@@ -164,6 +121,18 @@ module GSuiteAPI::Sheets
     end
 
     protected
+
+    def replace_table(values:, value_input_option:)
+      clear(range: "A2:#{column_name(values.first.count)}#{row_count}")
+
+      row_delta = values.count - (row_count - 1)
+      insert_rows(row_delta, start_index: row_count) if row_delta.positive?
+
+      # write data
+      service.update_spreadsheet_value \
+        id, range_with_name('A2'), { values: values },
+        value_input_option: value_input_option
+    end
 
     def column_name(int)
       name = 'A'
