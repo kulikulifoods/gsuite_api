@@ -22,11 +22,6 @@ module GSuiteAPI::Sheets
       api_object.properties.grid_properties.column_count
     end
 
-    # gets the number of rows in the first column's table
-    def table_row_count
-      get(range: 'A:A').values.count
-    end
-
     def get(range:)
       service.get_spreadsheet_values(id, range_with_name(range))
     end
@@ -46,22 +41,10 @@ module GSuiteAPI::Sheets
     end
 
     def replace_table(values:, value_input_option:)
-      current_size = table_row_count - 1
-      if current_size.zero?
-        # this means the table is actually empty, so replacing data is going
-        # to have weird effects anyways. so in this case, it's safe to use the
-        # row count.
-        current_size = row_count - 1
-      end
+      clear(range: "A2:#{column_name(values.first.count)}#{row_count}")
 
-      needed_size = values.count
-      row_delta = needed_size - current_size
-
-      if row_delta.negative?
-        delete_rows(row_delta.abs, start_index: 1)
-      elsif row_delta.positive? && (needed_size > (row_count - 1))
-        insert_rows(row_delta, start_index: 2)
-      end
+      row_delta = values.count - (row_count - 1)
+      insert_rows(row_delta, start_index: row_count) if row_delta.positive?
 
       # write data
       service.update_spreadsheet_value \
@@ -178,6 +161,14 @@ module GSuiteAPI::Sheets
     def inspect
       format '#<%p id=%p title=%p sheet=%p>', \
              self.class, id, spreadsheet.title, name
+    end
+
+    protected
+
+    def column_name(int)
+      name = 'A'
+      (int - 1).times { name.succ! }
+      name
     end
   end
 end

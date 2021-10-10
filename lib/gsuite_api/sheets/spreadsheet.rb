@@ -19,7 +19,12 @@ module GSuiteAPI::Sheets
     end
 
     def api_object
-      @api_object ||= service.get_spreadsheet id
+      @api_object ||= fresh_api_object
+    end
+
+    def refresh
+      @api_object = fresh_api_object
+      self
     end
 
     def title
@@ -32,6 +37,8 @@ module GSuiteAPI::Sheets
       end
 
       service.batch_update_spreadsheet id, { requests: requests }, {}
+      refresh
+      true
     end
 
     def duplicate(from:, to:)
@@ -41,10 +48,18 @@ module GSuiteAPI::Sheets
       } }
 
       service.batch_update_spreadsheet id, { requests: [request] }, {}
+      refresh
+      true
     end
 
     def inspect
       format("\#<%p id=%p title=%p>", self.class, id, title)
+    end
+
+    private
+
+    def fresh_api_object
+      service.get_spreadsheet id
     end
   end
 end
