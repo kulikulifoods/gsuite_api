@@ -22,6 +22,15 @@ module GSuiteAPI::Sheets
       api_object.properties.grid_properties.column_count
     end
 
+    def table_row_count
+      first_column = get(range: 'A:A').values
+      if first_column.present?
+        first_column.index([]) || row_count
+      else
+        0
+      end
+    end
+
     def get(range:)
       service.get_spreadsheet_values(id, range_with_name(range))
     end
@@ -43,6 +52,18 @@ module GSuiteAPI::Sheets
         values: values[1..-1], value_input_option: value_input_option
 
       add_a1_note(note: "Data Vortex updated at #{Time.current}")
+    end
+
+    def replace_table(values:, value_input_option:)
+      clear(range: "A2:#{column_name(values.first.count)}#{row_count}")
+
+      row_delta = values.count - (row_count - 1)
+      insert_rows(row_delta, start_index: row_count) if row_delta.positive?
+
+      # write data
+      service.update_spreadsheet_value \
+        id, range_with_name('A2'), { values: values },
+        value_input_option: value_input_option
     end
 
     def clear(range:)
@@ -112,7 +133,7 @@ module GSuiteAPI::Sheets
 
       update = { requests: [add_note] }
 
-      service.batch_update_spreadsheet(id, update, {})
+      service.batch_update_spreadsheet(id, update, fields: nil, quota_user: nil, options: nil)
     end
 
     def inspect
@@ -121,18 +142,6 @@ module GSuiteAPI::Sheets
     end
 
     protected
-
-    def replace_table(values:, value_input_option:)
-      clear(range: "A2:#{column_name(values.first.count)}#{row_count}")
-
-      row_delta = values.count - (row_count - 1)
-      insert_rows(row_delta, start_index: row_count) if row_delta.positive?
-
-      # write data
-      service.update_spreadsheet_value \
-        id, range_with_name('A2'), { values: values },
-        value_input_option: value_input_option
-    end
 
     def column_name(int)
       name = 'A'
