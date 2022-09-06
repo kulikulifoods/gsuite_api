@@ -41,7 +41,7 @@ module GSuiteAPI::Sheets
         value_input_option: value_input_option
     end
 
-    def upsert_table(values:, value_input_option:)
+    def upsert_table(values:, value_input_option:, extra_a1_note: nil)
       # touch up the headers
       service.update_spreadsheet_value \
         id, range_with_name('1:1'), { values: [values[0]] },
@@ -51,7 +51,13 @@ module GSuiteAPI::Sheets
       replace_table \
         values: values[1..-1], value_input_option: value_input_option
 
-      add_a1_note(note: "Data Vortex updated at #{Time.current}")
+      # set a useful note
+      note = "Data Vortex updated at #{Time.current}"
+      if extra_a1_note.present?
+        note += "\n#{extra_a1_note}"
+      end
+
+      add_a1_note note: note
     end
 
     def replace_table(values:, value_input_option:)
