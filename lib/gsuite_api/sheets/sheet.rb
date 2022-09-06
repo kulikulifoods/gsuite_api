@@ -54,7 +54,7 @@ module GSuiteAPI::Sheets
       # set a useful note
       note = "Data Vortex updated at #{Time.current}"
       if extra_a1_note.present?
-        note += "\n#{extra_a1_note}"
+        note += "\n\n#{extra_a1_note}"
       end
 
       add_a1_note note: note
