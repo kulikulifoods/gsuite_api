@@ -2,6 +2,7 @@ require "gsuite_api/version"
 
 # bare -- let other files cherry pick what they need
 require "active_support"
+require "active_support/core_ext/module/delegation"
 
 # code
 require "gsuite_api/drive"

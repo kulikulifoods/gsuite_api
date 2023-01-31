@@ -1,5 +1,3 @@
-require 'active_support/core_ext/module/delegation'
-
 # this is the tab
 module GSuiteAPI::Sheets
   class Sheet
