@@ -99,7 +99,7 @@ module GSuiteAPI::Sheets
       }
 
       update = { requests: [request] }
-      service.batch_update_spreadsheet id, update, {}
+      service.batch_update_spreadsheet id, update
     end
 
     def delete_rows(number, start_index:)
@@ -139,8 +139,8 @@ module GSuiteAPI::Sheets
 
       service.batch_update_spreadsheet(id, update, fields: nil, quota_user: nil, options: nil)
     end
-
     def inspect
+
       format '#<%p id=%p title=%p sheet=%p>', \
              self.class, id, spreadsheet.title, name
     end

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    gsuite_api (3.0.3)
+    gsuite_api (3.0.4)
       activesupport
       google-apis-drive_v3
       google-apis-sheets_v4

@@ -36,7 +36,7 @@ module GSuiteAPI::Sheets
         { delete_sheet: { sheet_id: sheet_id } }
       end
 
-      service.batch_update_spreadsheet id, { requests: requests }, {}
+      service.batch_update_spreadsheet id, { requests: requests }
       refresh
       true
     end
@@ -47,7 +47,7 @@ module GSuiteAPI::Sheets
         new_sheet_name: to,
       } }
 
-      service.batch_update_spreadsheet id, { requests: [request] }, {}
+      service.batch_update_spreadsheet id, { requests: [request] }
       refresh
       true
     end
