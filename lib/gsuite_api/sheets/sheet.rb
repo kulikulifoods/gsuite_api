@@ -6,6 +6,8 @@ module GSuiteAPI::Sheets
 
     attr_reader :name, :spreadsheet, :api_object
 
+    BATCH_SIZE = 10000
+
     def initialize(spreadsheet:, name:, api_object:)
       @spreadsheet = spreadsheet
       @name = name
@@ -64,10 +66,12 @@ module GSuiteAPI::Sheets
       row_delta = values.count - (row_count - 1)
       insert_rows(row_delta, start_index: row_count) if row_delta.positive?
 
-      # write data
-      service.update_spreadsheet_value \
-        id, range_with_name('A2'), { values: values },
-        value_input_option: value_input_option
+      # write data in batches
+      values.each_slice(BATCH_SIZE).each do |value_slice|
+        service.append_spreadsheet_value \
+          id, range_with_name('A2'), { values: value_slice },
+          value_input_option: value_input_option
+      end
     end
 
     def clear(range:)
@@ -139,6 +143,7 @@ module GSuiteAPI::Sheets
 
       service.batch_update_spreadsheet(id, update, fields: nil, quota_user: nil, options: nil)
     end
+
     def inspect
 
       format '#<%p id=%p title=%p sheet=%p>', \
