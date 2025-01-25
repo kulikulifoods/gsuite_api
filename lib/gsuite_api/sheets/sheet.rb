@@ -65,6 +65,7 @@ module GSuiteAPI::Sheets
 
       row_delta = values.count - (row_count - 1)
       insert_rows(row_delta, start_index: row_count) if row_delta.positive?
+      sleep 1 # allow time for row insert to settle
 
       # write data in batches
       values.each_slice(BATCH_SIZE).each do |value_slice|
