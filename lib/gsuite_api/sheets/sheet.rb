@@ -119,7 +119,7 @@ module GSuiteAPI::Sheets
     end
 
     def range_with_name(range)
-      "#{name}!#{range}"
+      "'#{name}'!#{range}"
     end
 
     def add_a1_note(note:)
