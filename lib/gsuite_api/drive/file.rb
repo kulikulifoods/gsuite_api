@@ -11,7 +11,7 @@ module GSuiteAPI::Drive
     end
 
     def api_object
-      @api_object ||= service.get_file id, fields: "id,name,kind,parents"
+    @api_object ||= service.get_file id, fields: "id,name,kind,parents", supports_all_drives: true
     end
 
     def copy(name:, parent: nil, description: nil)
@@ -20,7 +20,7 @@ module GSuiteAPI::Drive
       params[:parents] = [parent] if parent.present?
       params[:description] = description if description.present?
 
-      service.copy_file id, params, fields: "id,name"
+      service.copy_file id, params, fields: "id,name", supports_all_drives: true
     end
   end
 end
