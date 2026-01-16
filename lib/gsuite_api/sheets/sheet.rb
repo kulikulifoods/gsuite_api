@@ -69,12 +69,14 @@ module GSuiteAPI::Sheets
 
       # write data in batches
       values.each_slice(BATCH_SIZE).each do |value_slice|
-        service.append_spreadsheet_value \
-          id, range_with_name('A2'), { values: value_slice },
-          value_input_option: value_input_option,
-          insert_data_option: "OVERWRITE"
-          # allow time for successive writes to settle
-        sleep 1
+        elapsed = Benchmark.realtime do
+          service.append_spreadsheet_value \
+            id, range_with_name('A2'), { values: value_slice },
+            value_input_option: value_input_option,
+            insert_data_option: "OVERWRITE"
+        end
+        # allow time for successive writes to settle
+        sleep elapsed
       end
     end
 
