@@ -21,8 +21,8 @@ module GSuiteAPI
       def _service
         service = Google::Apis::SheetsV4::SheetsService.new
         service.authorization = GSuiteAPI.auth_client
-        service.request_options.timeout_sec = 120
-        service.request_options.open_timeout_sec = 60
+        service.client_options.open_timeout_sec = 60
+        service.client_options.read_timeout_sec = 120
         service
       end
     end
