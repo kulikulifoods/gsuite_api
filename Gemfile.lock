@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    gsuite_api (3.0.4)
+    gsuite_api (3.1.1)
       activesupport
       google-apis-drive_v3
       google-apis-sheets_v4
@@ -117,4 +117,4 @@ DEPENDENCIES
   rspec (~> 3.0)
 
 BUNDLED WITH
-   2.0.2
+  2.7.2
