@@ -45,6 +45,12 @@ module GSuiteAPI::Sheets
       service.get_spreadsheet_values(id, range_with_name(range))
     end
 
+    def table(range:)
+      values = get(range: range).values
+      headers = values.shift
+      values.map { |row| Hash[headers.zip(row)] }
+    end
+
     def set(range:, values:, value_input_option: 'USER_ENTERED')
       service.update_spreadsheet_value \
         id, range_with_name(range), { values: values },
