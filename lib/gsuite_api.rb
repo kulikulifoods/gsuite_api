@@ -1,7 +1,6 @@
 require "gsuite_api/version"
 
 # bare -- let other files cherry pick what they need
-require "benchmark"
 require "active_support"
 require "active_support/core_ext/module/delegation"
 

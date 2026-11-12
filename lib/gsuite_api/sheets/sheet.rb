@@ -129,12 +129,12 @@ module GSuiteAPI::Sheets
       values.each_slice(BATCH_SIZE).with_index do |value_slice, index|
         end_row = start_row + value_slice.size - 1
         update_range = "A#{start_row}:#{column_name(column_count)}#{end_row}"
-        elapsed = Benchmark.realtime do
-          service.update_spreadsheet_value \
-            id, range_with_name(update_range), { values: value_slice },
-            value_input_option: value_input_option,
-            include_values_in_response: false
-        end
+        started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+        service.update_spreadsheet_value \
+          id, range_with_name(update_range), { values: value_slice },
+          value_input_option: value_input_option,
+          include_values_in_response: false
+        elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
 
         # udpate start_row for next batch
         start_row = start_row + value_slice.size
